@@ -22,4 +22,4 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-/github/workflows/tests.yml
+.github/workflows/tests.yml
