@@ -54,7 +54,7 @@ export default function Welcome() {
                             animate={{ filter: 'blur(0)', scale: 1, transition: { duration: 0.8 } }}
                             className="text-3xl leading-tight font-semibold tracking-tight text-[#2cb7c8] lg:text-6xl dark:text-[#EDEDEC]"
                         >
-                            <span className="amoria-font text-[#2cb7c8]">Mafioso</span>
+                            <span className="amoria-font text-[#2cb7c8]">MAFIOSO</span>
                         </motion.h1>
                         <motion.p
                             initial={{ filter: 'blur(10px)' }}
