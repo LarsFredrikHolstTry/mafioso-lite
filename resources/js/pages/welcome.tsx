@@ -19,7 +19,7 @@ export default function Welcome() {
                                 href={route('crime')}
                                 className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                             >
-                                Hjem
+                                Spill Mafioso
                             </Link>
                         ) : (
                             <>
@@ -42,24 +42,24 @@ export default function Welcome() {
                 <div className="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
                     <div className="flex w-full flex-col items-center justify-center gap-2 lg:max-w-4xl">
                         <motion.img
-                            initial={{ filter: 'blur(10px)', scale: 0.8 }}
-                            animate={{ filter: 'blur(0)', scale: 1, transition: { duration: 0.5 } }}
+                            initial={{ filter: 'blur(3px)', scale: 0.8, y: 20 }}
+                            animate={{ filter: 'blur(0)', scale: 1, y: 0, transition: { duration: 1 } }}
                             src="/images/logo.png"
                             alt="Mafioso Logo"
                             className="mb-4"
                             style={{ width: '54px', height: '54px', objectFit: 'cover' }}
                         />
                         <motion.h1
-                            initial={{ filter: 'blur(10px)' }}
-                            animate={{ filter: 'blur(0)', scale: 1, transition: { duration: 0.8 } }}
+                            initial={{ filter: 'blur(7px)', scale: 0.8, y: 20 }}
+                            animate={{ filter: 'blur(0)', scale: 1, y: 0, transition: { duration: 1.3 } }}
                             className="text-3xl leading-tight font-semibold tracking-tight text-[#2cb7c8] lg:text-6xl dark:text-[#EDEDEC]"
                         >
                             <span className="amoria-font text-[#2cb7c8]">MAFIOSO</span>
                         </motion.h1>
                         <motion.p
-                            initial={{ filter: 'blur(10px)' }}
-                            animate={{ filter: 'blur(0)', scale: 1, transition: { duration: 1 } }}
-                            className="mb-5 text-sm text-[#1b1b18] lg:text-base dark:text-[#EDEDEC]"
+                            initial={{ filter: 'blur(10px)', scale: 0.8, y: 20 }}
+                            animate={{ filter: 'blur(0)', scale: 1, y: 0, transition: { duration: 1.5 } }}
+                            className="mb-5 text-sm text-[#1b1b18] lg:text-base dark:text-[#EDEDED]"
                         >
                             Ditt mafiaspill på nett
                         </motion.p>
