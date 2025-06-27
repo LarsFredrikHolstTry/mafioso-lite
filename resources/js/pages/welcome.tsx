@@ -39,8 +39,16 @@ export default function Welcome() {
                         )}
                     </nav>
                 </header>
-                <div className="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
-                    <div className="flex w-full flex-col items-center justify-center gap-2 lg:max-w-4xl">
+                <div className="relative flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
+                    <motion.img
+                        src="/images/skull_mafia_holding_double_gun_vector.jpg"
+                        alt="Mafia Skull"
+                        initial={{ filter: 'blur(10px)', scale: 0.8, opacity: 0, y: 20 }}
+                        animate={{ filter: 'blur(2px)', scale: 1, opacity: 0.1, y: 0, transition: { duration: 1 } }}
+                        className="pointer-events-none absolute inset-0 h-full w-full object-contain select-none"
+                        style={{ zIndex: 0 }}
+                    />
+                    <div className="relative z-10 flex w-full flex-col items-center justify-center gap-2 lg:max-w-4xl">
                         <motion.img
                             initial={{ filter: 'blur(3px)', scale: 0.8, y: 20 }}
                             animate={{ filter: 'blur(0)', scale: 1, y: 0, transition: { duration: 1 } }}
