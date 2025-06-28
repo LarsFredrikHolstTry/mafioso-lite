@@ -11,6 +11,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('crime', function () {
         return Inertia::render('crime');
     })->name('crime');
+
+    Route::get('bank', function () {
+        return Inertia::render('bank');
+    })->name('bank');
+
+    Route::get('car-theft', function () {
+        return Inertia::render('car-theft');
+    })->name('car-theft');
 });
 
 require __DIR__ . '/settings.php';
