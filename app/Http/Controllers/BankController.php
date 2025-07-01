@@ -20,6 +20,11 @@ class BankController extends Controller {
     ]);
 
     $user = Auth::user();
+
+    if ($user->bankmoney < $request->amount) {
+      return response()->json(['message' => 'Insufficient bank funds'], 400);
+    }
+
     $user->money += $request->amount;
     $user->bankmoney -= $request->amount;
     /** @var \App\Models\User $user */
