@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Schema;
 class AddMoneyAndBankmoneyToUsersTable extends Migration {
   public function up() {
     Schema::table('users', function (Blueprint $table) {
-      $table->decimal('money', 10, 2)->default(0);
-      $table->decimal('bankmoney', 10, 2)->default(0);
+      $table->decimal('money', 10, 2)->default(100);
+      $table->decimal('bankmoney', 10, 2)->default(10000);
     });
   }
 
