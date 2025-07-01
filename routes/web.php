@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\BankController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -19,6 +20,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('car-theft', function () {
         return Inertia::render('car-theft');
     })->name('car-theft');
+
+    Route::get('/api/user/balance', [BankController::class, 'balance']);
+    Route::post('/api/user/deposit', [BankController::class, 'deposit']);
+    Route::post('/api/user/withdraw', [BankController::class, 'withdraw']);
 });
 
 require __DIR__ . '/settings.php';
