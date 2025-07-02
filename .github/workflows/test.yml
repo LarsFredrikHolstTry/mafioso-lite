@@ -44,6 +44,12 @@ jobs:
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist
 
+      - name: Copy .env
+        run: cp .env.example .env
+
+      - name: Generate App Key
+        run: php artisan key:generate
+
       - name: Wait for MySQL
         run: |
           until mysql -h 127.0.0.1 -u laravel -psecret -e "SELECT 1"; do
