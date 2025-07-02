@@ -56,5 +56,11 @@ jobs:
             sleep 1
           done
 
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
       - name: Run Tests
         run: php artisan test
