@@ -1,9 +1,12 @@
 import { AppFooter } from '@/components/app-footer';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -39,6 +42,13 @@ export default function Bank() {
         })
             .then((response) => response.json())
             .then((data) => {
+                console.log('data:', data.error);
+
+                if (!!data.error) {
+                    toast(data.error, {});
+                    return;
+                }
+
                 setMoney(data.money);
                 setBankMoney(data.bankmoney);
             });
@@ -55,6 +65,12 @@ export default function Bank() {
         })
             .then((response) => response.json())
             .then((data) => {
+                console.log('data:', data.error);
+                if (!!data.error) {
+                    toast(data.error, {});
+                    return;
+                }
+
                 setMoney(data.money);
                 setBankMoney(data.bankmoney);
             });
@@ -79,9 +95,15 @@ export default function Bank() {
                     <div className="p-4">
                         <h2>Current Money: ${money}</h2>
                         <h2>Bank Money: ${bankMoney}</h2>
-                        <input type="number" value={amount} onChange={(e) => setAmount(Number(e.target.value))} placeholder="Enter amount" />
-                        <button onClick={handleDeposit}>Deposit</button>
-                        <button onClick={handleWithdraw}>Withdraw</button>
+                        <Input
+                            className="mt-2 mb-4"
+                            type="number"
+                            value={amount}
+                            onChange={(e) => setAmount(Number(e.target.value))}
+                            placeholder="Enter amount"
+                        />
+                        <Button onClick={handleDeposit}>Deposit</Button>
+                        <Button onClick={handleWithdraw}>Withdraw</Button>
                     </div>
                 </div>
                 <AppFooter />
