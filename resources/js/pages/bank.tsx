@@ -2,6 +2,7 @@ import { AppFooter } from '@/components/app-footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { Skeleton } from '@/components/ui/skeleton';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -20,7 +21,11 @@ export default function Bank() {
     const [amount, setAmount] = useState(0);
     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-    const { data, refetch: refetchBalance } = useQuery({
+    const {
+        data: balanceData,
+        refetch: refetchBalance,
+        isLoading: isBalanceLoading,
+    } = useQuery({
         queryKey: ['balance'],
         queryFn: async () => {
             const res = await fetch('/api/user/balance');
@@ -28,8 +33,8 @@ export default function Bank() {
         },
     });
 
-    const money = data?.money ?? 0;
-    const bankMoney = data?.bankmoney ?? 0;
+    const money = balanceData?.money ?? 0;
+    const bankMoney = balanceData?.bankmoney ?? 0;
 
     const handleDeposit = () => {
         fetch('/api/user/deposit', {
@@ -76,8 +81,20 @@ export default function Bank() {
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                         <div className="p-4">
                             <h1 className="text-2xl font-bold">Banken i Medellin</h1>
-                            <h2>Penger på hånden: {money},-</h2>
-                            <h2>Penger i banken: {bankMoney},-</h2>
+                            <h2>
+                                {isBalanceLoading ? (
+                                    <Skeleton className="mt-1 h-[20px] w-[250px] rounded-full" />
+                                ) : (
+                                    <span>Penger på hånden: {money},-</span>
+                                )}
+                            </h2>
+                            <h2>
+                                {isBalanceLoading ? (
+                                    <Skeleton className="mt-1 h-[20px] w-[250px] rounded-full" />
+                                ) : (
+                                    <span>Penger i banken: {bankMoney},-</span>
+                                )}
+                            </h2>
                             <div className="flex flex-row items-center gap-2">
                                 <Input
                                     className="my-4"
