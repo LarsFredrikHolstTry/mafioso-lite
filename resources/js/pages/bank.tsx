@@ -73,6 +73,16 @@ export default function Bank() {
                 refetchBalance();
             });
     };
+
+    const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (isNaN(Number(event.target.value))) {
+            toast('Please enter a valid number');
+            return;
+        }
+
+        setAmount(Number(event.target.value));
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Bank" />
@@ -98,9 +108,9 @@ export default function Bank() {
                             <div className="flex flex-row items-center gap-2">
                                 <Input
                                     className="my-4"
-                                    type="number"
+                                    type="text"
                                     value={amount}
-                                    onChange={(e) => setAmount(Number(e.target.value))}
+                                    onChange={(event) => handleInput(event)}
                                     placeholder="Enter amount"
                                 />
                                 <Button onClick={handleDeposit}>Deposit</Button>
