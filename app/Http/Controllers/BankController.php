@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\NumberHelper;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class BankController extends Controller {
   public function balance() {
     $user = Auth::user();
+
     return response()->json([
-      'money' => $user->money,
-      'bankmoney' => $user->bankmoney,
+      'money' => NumberHelper::format($user->money),
+      'bankmoney' => NumberHelper::format($user->bankmoney),
     ]);
   }
 

@@ -11,8 +11,8 @@ test('returns the correct balance', function () {
     ->getJson('/api/user/balance')
     ->assertOk()
     ->assertJson([
-      'money' => 1000,
-      'bankmoney' => 500,
+      'money' => '1 000',
+      'bankmoney' => '500',
     ]);
 });
 
