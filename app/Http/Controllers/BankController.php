@@ -36,7 +36,11 @@ class BankController extends Controller {
     /** @var \App\Models\User $user */
     $user->save();
 
-    return response()->json(['message' => 'Du satt inn ' . $request->amount . ',-', 'money' => $user->money, 'bankmoney' => $user->bankmoney]);
+    return response()->json([
+      'message' => 'Du satt inn ' . NumberHelper::format($request->amount) . ',-',
+      'money' => $user->money,
+      'bankmoney' => $user->bankmoney
+    ]);
   }
 
   public function withdraw(Request $request) {
@@ -59,7 +63,7 @@ class BankController extends Controller {
     $user->save();
 
     return response()->json([
-      'message' => 'Du tok ut ' . $request->amount . ',-',
+      'message' => 'Du tok ut ' . NumberHelper::format($request->amount) . ',-',
       'money' => $user->money,
       'bankmoney' => $user->bankmoney
     ]);
