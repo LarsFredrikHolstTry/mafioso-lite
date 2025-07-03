@@ -16,6 +16,18 @@ test('returns the correct balance', function () {
     ]);
 });
 
+test('can deposit exact amount from wallet to bank', function () {
+  $user = User::factory()->create(['money' => 100, 'bankmoney' => 100]);
+  $this->actingAs($user)
+    ->postJson('/api/user/deposit', ['amount' => 100])
+    ->assertOk()
+    ->assertJson([
+      'message' => "Du satt inn 100,-",
+      'money' => 0,
+      'bankmoney' => 200,
+    ]);
+});
+
 test('can deposit money from bank to wallet', function () {
   $user = User::factory()->create(['money' => 100, 'bankmoney' => 100]);
   $this->actingAs($user)
@@ -33,6 +45,18 @@ test('cannot deposit more than money', function () {
   $this->actingAs($user)
     ->postJson('/api/user/deposit', ['amount' => 50])
     ->assertJsonFragment(['error' => 'Du kan ikke sette inn mer enn du har på hånden']);
+});
+
+test('can withdraw exact amount from bank to wallet', function () {
+  $user = User::factory()->create(['money' => 100, 'bankmoney' => 100]);
+  $this->actingAs($user)
+    ->postJson('/api/user/withdraw', ['amount' => 100])
+    ->assertOk()
+    ->assertJson([
+      "message" => "Du tok ut 100,-",
+      'money' => 200,
+      'bankmoney' => 0,
+    ]);
 });
 
 test('can withdraw money from wallet to bank', function () {
