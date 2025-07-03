@@ -75,14 +75,7 @@ npm run dev
 - **Run Tests:**
 
     ```sh
-    ./vendor/bin/pest
-    ```
-
-- **Lint & Format:**
-    ```sh
-    npm run lint
-    npm run format
-    vendor/bin/pint
+    php artisan test
     ```
 
 ---
