@@ -5,7 +5,8 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -16,20 +17,19 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Bank() {
-    const [money, setMoney] = useState(0);
-    const [bankMoney, setBankMoney] = useState(0);
     const [amount, setAmount] = useState(0);
-
     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-    useEffect(() => {
-        fetch('/api/user/balance')
-            .then((response) => response.json())
-            .then((data) => {
-                setMoney(data.money);
-                setBankMoney(data.bankmoney);
-            });
-    }, []);
+    const { data, refetch: refetchBalance } = useQuery({
+        queryKey: ['balance'],
+        queryFn: async () => {
+            const res = await fetch('/api/user/balance');
+            return res.json();
+        },
+    });
+
+    const money = data?.money ?? 0;
+    const bankMoney = data?.bankmoney ?? 0;
 
     const handleDeposit = () => {
         fetch('/api/user/deposit', {
@@ -42,15 +42,11 @@ export default function Bank() {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log('data:', data.error);
-
                 if (!!data.error) {
                     toast(data.error, {});
                     return;
                 }
-
-                setMoney(data.money);
-                setBankMoney(data.bankmoney);
+                refetchBalance();
             });
     };
 
@@ -65,24 +61,35 @@ export default function Bank() {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log('data:', data.error);
                 if (!!data.error) {
                     toast(data.error, {});
                     return;
                 }
-
-                setMoney(data.money);
-                setBankMoney(data.bankmoney);
+                refetchBalance();
             });
     };
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Bank" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+                        <div className="p-4">
+                            <h1 className="text-2xl font-bold">Banken i Medellin</h1>
+                            <h2>Penger på hånden: {money},-</h2>
+                            <h2>Penger i banken: {bankMoney},-</h2>
+                            <div className="flex flex-row items-center gap-2">
+                                <Input
+                                    className="my-4"
+                                    type="number"
+                                    value={amount}
+                                    onChange={(e) => setAmount(Number(e.target.value))}
+                                    placeholder="Enter amount"
+                                />
+                                <Button onClick={handleDeposit}>Deposit</Button>
+                                <Button onClick={handleWithdraw}>Withdraw</Button>
+                            </div>
+                        </div>
                     </div>
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                         <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
@@ -92,19 +99,7 @@ export default function Bank() {
                     </div>
                 </div>
                 <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <div className="p-4">
-                        <h2>Current Money: ${money}</h2>
-                        <h2>Bank Money: ${bankMoney}</h2>
-                        <Input
-                            className="mt-2 mb-4"
-                            type="number"
-                            value={amount}
-                            onChange={(e) => setAmount(Number(e.target.value))}
-                            placeholder="Enter amount"
-                        />
-                        <Button onClick={handleDeposit}>Deposit</Button>
-                        <Button onClick={handleWithdraw}>Withdraw</Button>
-                    </div>
+                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
                 </div>
                 <AppFooter />
             </div>
