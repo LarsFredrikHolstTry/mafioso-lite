@@ -17,37 +17,39 @@ test('returns the correct balance', function () {
 });
 
 test('can deposit money from bank to wallet', function () {
-  $user = User::factory()->create(['money' => 100, 'bankmoney' => 200]);
+  $user = User::factory()->create(['money' => 100, 'bankmoney' => 100]);
   $this->actingAs($user)
     ->postJson('/api/user/deposit', ['amount' => 50])
     ->assertOk()
     ->assertJson([
-      'money' => 150,
+      'message' => "Du satt inn 50,-",
+      'money' => 50,
       'bankmoney' => 150,
     ]);
 });
 
-test('cannot deposit more than bankmoney', function () {
-  $user = User::factory()->create(['money' => 100, 'bankmoney' => 20]);
+test('cannot deposit more than money', function () {
+  $user = User::factory()->create(['money' => 10, 'bankmoney' => 100]);
   $this->actingAs($user)
     ->postJson('/api/user/deposit', ['amount' => 50])
-    ->assertJsonFragment(['error' => 'Insufficient bank funds']);
+    ->assertJsonFragment(['error' => 'Du kan ikke sette inn mer enn du har på hånden']);
 });
 
 test('can withdraw money from wallet to bank', function () {
-  $user = User::factory()->create(['money' => 200, 'bankmoney' => 100]);
+  $user = User::factory()->create(['money' => 100, 'bankmoney' => 100]);
   $this->actingAs($user)
     ->postJson('/api/user/withdraw', ['amount' => 50])
     ->assertOk()
     ->assertJson([
+      "message" => "Du tok ut 50,-",
       'money' => 150,
-      'bankmoney' => 150,
+      'bankmoney' => 50,
     ]);
 });
 
-test('cannot withdraw more than money', function () {
-  $user = User::factory()->create(['money' => 10, 'bankmoney' => 100]);
+test('cannot withdraw more than bankmoney', function () {
+  $user = User::factory()->create(['money' => 100, 'bankmoney' => 10]);
   $this->actingAs($user)
     ->postJson('/api/user/withdraw', ['amount' => 50])
-    ->assertJsonFragment(['error' => 'Insufficient funds']);
+    ->assertJsonFragment(['error' => 'Du kan ikke ta ut mer enn du har på hånden']);
 });

@@ -24,16 +24,19 @@ class BankController extends Controller {
 
     $user = Auth::user();
 
-    if ($user->bankmoney < $request->amount) {
-      return response()->json(['message' => 'Insufficient bank funds', 'error' => 'Insufficient bank funds']);
+    if ($user->money < $request->amount) {
+      return response()->json([
+        'message' => 'Du kan ikke sette inn mer enn du har på hånden',
+        'error' => 'Du kan ikke sette inn mer enn du har på hånden'
+      ]);
     }
 
-    $user->money += $request->amount;
-    $user->bankmoney -= $request->amount;
+    $user->money -= $request->amount;
+    $user->bankmoney += $request->amount;
     /** @var \App\Models\User $user */
     $user->save();
 
-    return response()->json(['message' => 'Deposit successful', 'money' => $user->money, 'bankmoney' => $user->bankmoney]);
+    return response()->json(['message' => 'Du satt inn ' . $request->amount . ',-', 'money' => $user->money, 'bankmoney' => $user->bankmoney]);
   }
 
   public function withdraw(Request $request) {
@@ -43,15 +46,22 @@ class BankController extends Controller {
 
     $user = Auth::user();
 
-    if ($user->money < $request->amount) {
-      return response()->json(['message' => 'Insufficient funds', 'error' => 'Insufficient funds']);
+    if ($user->bankmoney < $request->amount) {
+      return response()->json([
+        'message' => 'Du kan ikke sette inn mer enn du har på hånden',
+        'error' => 'Du kan ikke ta ut mer enn du har på hånden'
+      ]);
     }
 
-    $user->money -= $request->amount;
-    $user->bankmoney += $request->amount;
+    $user->money += $request->amount;
+    $user->bankmoney -= $request->amount;
     /** @var \App\Models\User $user */
     $user->save();
 
-    return response()->json(['message' => 'Withdrawal successful', 'money' => $user->money, 'bankmoney' => $user->bankmoney]);
+    return response()->json([
+      'message' => 'Du tok ut ' . $request->amount . ',-',
+      'money' => $user->money,
+      'bankmoney' => $user->bankmoney
+    ]);
   }
 }

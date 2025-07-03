@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { Skeleton } from '@/components/ui/skeleton';
 import AppLayout from '@/layouts/app-layout';
+import { numberWithSpaces } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { useQuery } from '@tanstack/react-query';
@@ -18,7 +19,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Bank() {
-    const [amount, setAmount] = useState(0);
+    const [amount, setAmount] = useState<number | string>('');
     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
     const {
@@ -75,12 +76,23 @@ export default function Bank() {
     };
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (isNaN(Number(event.target.value))) {
-            toast('Please enter a valid number');
+        const rawValue = event.target.value.replace(/\s/g, '');
+        if (!/^\d*$/.test(rawValue)) {
+            toast('Vennligst oppgi et gyldig tall', {
+                description: 'Kun sifre er tillatt',
+                style: {
+                    color: 'oklab(0.7 0.18 0.07 / 0.9)',
+                },
+                position: 'top-center',
+                action: {
+                    label: 'Ok',
+                    onClick: () => {},
+                },
+            });
             return;
         }
 
-        setAmount(Number(event.target.value));
+        setAmount(numberWithSpaces(rawValue));
     };
 
     return (
@@ -111,10 +123,10 @@ export default function Bank() {
                                     type="text"
                                     value={amount}
                                     onChange={(event) => handleInput(event)}
-                                    placeholder="Enter amount"
+                                    placeholder="Skriv inn beløp"
                                 />
-                                <Button onClick={handleDeposit}>Deposit</Button>
-                                <Button onClick={handleWithdraw}>Withdraw</Button>
+                                <Button onClick={handleDeposit}>Sett inn</Button>
+                                <Button onClick={handleWithdraw}>Ta ut</Button>
                             </div>
                         </div>
                     </div>
