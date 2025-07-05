@@ -12,8 +12,8 @@ class BankController extends Controller {
     $user = Auth::user();
 
     return response()->json([
-      'money' => NumberHelper::format($user->money),
-      'bankmoney' => NumberHelper::format($user->bankmoney),
+      'money' => $user->money,
+      'bankmoney' => $user->bankmoney,
     ]);
   }
 
