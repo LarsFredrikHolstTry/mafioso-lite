@@ -34,11 +34,7 @@ export default function Bank() {
     const [amount, setAmount] = useState<number | string>('');
     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-    const {
-        data: balanceData,
-        refetch: refetchBalance,
-        isLoading: isBalanceLoading,
-    } = useQuery({
+    const { data: balanceData, isLoading: isBalanceLoading } = useQuery({
         queryKey: ['balance'],
         queryFn: async () => {
             const res = await fetch('/api/user/balance');
@@ -85,7 +81,7 @@ export default function Bank() {
         })
             .then((response) => response.json())
             .then((data) => {
-                if (!!data.error) {
+                if (data.error) {
                     setMoney(prevMoney);
                     setBankMoney(prevBankMoney);
                     toast(data.error, toastErrorOptions);
@@ -128,7 +124,7 @@ export default function Bank() {
         })
             .then((response) => response.json())
             .then((data) => {
-                if (!!data.error) {
+                if (data.error) {
                     setMoney(prevMoney);
                     setBankMoney(prevBankMoney);
                     toast(data.error, toastErrorOptions);
